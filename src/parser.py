@@ -14,9 +14,10 @@ class CLIstate(Enum):
 help_message = 'This is a temporary help message to be redone later'
 
 
-parser = argparse.ArgumentParser(description=programname)
+parser = argparse.ArgumentParser(exit_on_error=False, description=programname, add_help=False)
 
 group = parser.add_mutually_exclusive_group()
+group.add_argument('-h', '--help', action='store_true', help='')
 group.add_argument('-b', '--back', action='store_true', help='')
 group.add_argument('-e', '--exit', action='store_true', help='')
 group.add_argument('-s', '--saved', action='store_true', help='')
@@ -29,5 +30,6 @@ if __name__ == "__main__":
     print(args)
     while not args.exit :
         s = input("Volunhub: ")
-        args = parser.parse_args(s.split())
-        
+        args, unknown = parser.parse_known_args(s.split())
+        print(args)
+        print(unknown)
