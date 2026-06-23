@@ -1,1 +1,1 @@
-#this can be the main folder
+print("Hello World")
