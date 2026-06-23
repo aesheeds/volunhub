@@ -1,7 +1,7 @@
 import argparse
 from enum import Enum, auto
 
-programname = 'Volunhub'
+programname = 'Jobhub'
 
 class CLIstate(Enum):
     INTRO = auto()
