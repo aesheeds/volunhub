@@ -26,12 +26,9 @@ class State():
         #arguments to be parsed
         self.group = self.parser.add_mutually_exclusive_group()
         self.group.add_argument('-h', '--help', action='store_true', help='')
-        self.group.add_argument('-b', '--back', action='store_true', help='')
+        self.group.add_argument('-q', '--query', action='store_true', help='')
         self.group.add_argument('-e', '--exit', action='store_true', help='')
-        self.group.add_argument('-s', '--saved', action='store_true', help='')
         self.group.add_argument('-p', '--profile', action='store_true', help='')
-        self.group.add_argument('-c', '--confirm', action='extend', nargs='+',   help='')
-        self.group.add_argument('-u', '--unconfirm', action='extend', nargs='+',  help='')
         
         self.args = None
         self.state = CLIstate.INTRO
@@ -52,11 +49,10 @@ class State():
         self.args = self.parser.parse_known_args(string.split())
         if self.args.help:
             print(help_message)
-        if self.args.back and self.state == CLIstate.PROFILE:
+        if self.args.query:
             self.state = CLIstate.QUERY
         if self.args.profile:
             self.state = CLIstate.PROFILE
-
 
     def exit(self):
         if self.args:
@@ -111,12 +107,13 @@ class State():
 
                     else: 
                         print("invalid option")
+                self.state = CLIstate.QUERY
 
             case CLIstate.QUERY :
-                print("Currently in Query State")
+                print("JobHub > ")
             
             case CLIstate.PROFILE :
-                print("Currently in Profile State")
+                self.print_data()
             
             case _ :
                 print("Unknown State Reached")
