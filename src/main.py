@@ -18,6 +18,7 @@ def get_new_user():
     major = input("Major: ")
     skills = input("Skills: ")
     experience = input("Experience: ")
+    location = input("Location: ")
 
     print("Job type:")
     print("1. Internship")
@@ -54,9 +55,7 @@ creates a new profile if there is none found
 """
 def get_profile():
 
-    has_profile  + input(
-        "Do you have an existing profile? (yes/no): "
-    ).lower()
+    has_profile = input("Do you have an existing profile? (yes/no): ").lower()
 
     if has_profile == "yes":
         first_name = input("Enter your first name: ")
@@ -86,7 +85,6 @@ def main():
 
     query = generate_search_query(
         profile["first_name"],
-        profile["last_name"],
         profile["degree"],
         profile["major"],
         profile["skills"],
