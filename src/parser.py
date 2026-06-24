@@ -6,30 +6,123 @@ programname = 'Jobhub'
 class CLIstate(Enum):
     INTRO = auto()
     CREDENTIALS = auto()
-    SEARCH = auto()
-    SAVED = auto()
+    QUERY = auto()
     PROFILE = auto()
 
-#todo make a better help_message
-help_message = 'This is a temporary help message to be redone later'
+""" Class State
+stores the current state of the program and parses the CLI
+"""
+class State():
+    #initialize the parser and the argumetns we are looking for
+    def __init__(self, msg=None):
+        if not msg:
+            #todo make a better help_message
+            help_message = 'This is a temporary help message to be redone later'
+        else:
+            help_message = msg
+
+        self.parser = argparse.ArgumentParser(exit_on_error=False, description=programname, add_help=False)
+        
+        #arguments to be parsed
+        self.group = self.parser.add_mutually_exclusive_group()
+        self.group.add_argument('-h', '--help', action='store_true', help='')
+        self.group.add_argument('-b', '--back', action='store_true', help='')
+        self.group.add_argument('-e', '--exit', action='store_true', help='')
+        self.group.add_argument('-s', '--saved', action='store_true', help='')
+        self.group.add_argument('-p', '--profile', action='store_true', help='')
+        self.group.add_argument('-c', '--confirm', action='extend', nargs='+',   help='')
+        self.group.add_argument('-u', '--unconfirm', action='extend', nargs='+',  help='')
+        
+        self.args = None
+        self.state = CLIstate.INTRO
+        self.data = {
+            "first_name": None,
+            "last_name": None,
+            "degree": None,
+            "major": None,
+            "skills": None,
+            "experience": None,
+            "location": None
+            }
+
+    def print_data(self):
+        print(self.data)
+
+    def parse(self, string):
+        self.args = self.parser.parse_known_args(string.split())
+        if self.args.help:
+            print(help_message)
+        if self.args.back and self.state == CLIstate.PROFILE:
+            self.state = CLIstate.QUERY
+        if self.args.profile:
+            self.state = CLIstate.PROFILE
 
 
-parser = argparse.ArgumentParser(exit_on_error=False, description=programname, add_help=False)
+    def exit(self):
+        if self.args:
+            self.args.exit
 
-group = parser.add_mutually_exclusive_group()
-group.add_argument('-h', '--help', action='store_true', help='')
-group.add_argument('-b', '--back', action='store_true', help='')
-group.add_argument('-e', '--exit', action='store_true', help='')
-group.add_argument('-s', '--saved', action='store_true', help='')
-group.add_argument('-p', '--profile', action='store_true', help='')
-group.add_argument('-c', '--confirm', action='extend', nargs='+',   help='')
-group.add_argument('-u', '--unconfirm', action='extend', nargs='+',  help='')
+    def create_account(self):
+        for key in self.data:
+            if self.data[key] is None:
+                self.data[key] = input(f"{key}: ")
+
+    def display_state(self):
+        match self.state:
+            case CLIstate.INTRO :
+                print("Welcome to JobHub!\nPlease enter your credentials or create a new account")
+                self.state = CLIstate.CREDENTIALS
+
+            case CLIstate.CREDENTIALS :
+                FL_name = None
+                pswd = None
+                I = None
+                while I != "login" and I != "create":
+                    I = input("Login or Create an account (login/create)? ")
+                    if I == "login":
+                        while not FL_name:
+                            print("Login to your account")
+                            name = input("Enter your First and Last name: ")
+                            pswd = input("Enter your password: ")
+                            if len(name.split()) > 2 or len(name.split()) < 2:
+                                print("invalid name")
+                            else:
+                                FL_name = name
+                                print(FL_name)
+                                self.data["first_name"] = name.split()[0]
+                                self.data["last_name"] = name.split()[1]
+                        print("retrieving information from the database")
+
+                    elif I == "create":
+                        while  not FL_name:
+                            print("Creating new account")
+                            name = input("Enter your First and Last name: ")
+                            pswd = input("Enter your password: ")
+                            if len(name.split()) > 2 or len(name.split()) < 2:
+                                print("invalid name")
+                            else:
+                                FL_name = name
+                                self.data["first_name"] = name.split()[0]
+                                self.data["last_name"] = name.split()[1]
+
+                        print("Please enter the following information:")
+                        self.create_account()
+                        print("sending information to database")
+
+                    else: 
+                        print("invalid option")
+
+            case CLIstate.QUERY :
+                print("Currently in Query State")
+            
+            case CLIstate.PROFILE :
+                print("Currently in Profile State")
+            
+            case _ :
+                print("Unknown State Reached")
 
 if __name__ == "__main__":
-    args = parser.parse_args()
-    print(args)
-    while not args.exit :
-        s = input("Volunhub: ")
-        args, unknown = parser.parse_known_args(s.split())
-        print(args)
-        print(unknown)
+    state = State()
+    state.display_state()
+    state.display_state()
+    state.print_data()
