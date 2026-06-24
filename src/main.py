@@ -1,8 +1,9 @@
 # main.py
 from database import save_user, get_user
 from gemini import generate_search_query
+from jsearch import send_query
+
 # Placeholders for future imports
-# from jsearch import search jobs
 # from parser import parse jsearch results
 # from format import display jobs
 
@@ -96,8 +97,10 @@ def main():
     print("\nGenerated JSearch Query:")
     print(query)
 
+    raw_jobs = send_query(query)
+    print(raw_jobs)
+
     # Future integration:
-    #jsearch query
     #parser
     #formatter
 
