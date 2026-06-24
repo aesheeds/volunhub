@@ -2,10 +2,10 @@
 from database import save_user, get_user
 from gemini import generate_search_query
 from jsearch import send_query
+from format import display_jobs
 
 # Placeholders for future imports
 # from parser import parse jsearch results
-# from format import display jobs
 
 """
 Creates a new user profile by collecting all the required information
@@ -98,7 +98,11 @@ def main():
     print(query)
 
     raw_jobs = send_query(query)
-    print(raw_jobs)
+    
+    jobs = raw_jobs["data"]["jobs"]
+
+    display_jobs(jobs)
+
 
     # Future integration:
     #parser
