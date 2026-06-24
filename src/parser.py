@@ -64,7 +64,8 @@ class State():
 
     def create_account(self):
         for key in self.data:
-            self.data[key] = input(f"{key}: ")
+            if self.data[key] is None:
+                self.data[key] = input(f"{key}: ")
 
     def display_state(self):
         match self.state:
@@ -76,35 +77,36 @@ class State():
                 FL_name = None
                 pswd = None
                 I = None
-                while I != "login" or I != "create":
+                while I != "login" and I != "create":
                     I = input("Login or Create an account (login/create)? ")
                     if I == "login":
                         while not FL_name:
                             print("Login to your account")
                             name = input("Enter your First and Last name: ")
                             pswd = input("Enter your password: ")
-                            if len(name.split()) > 2:
+                            if len(name.split()) > 2 or len(name.split()) < 2:
                                 print("invalid name")
                             else:
                                 FL_name = name
-                                self.data["first_name"] = name[0]
-                                self.data["last_name"] = name[1]
-                        print("retrieving information to database")
+                                print(FL_name)
+                                self.data["first_name"] = name.split()[0]
+                                self.data["last_name"] = name.split()[1]
+                        print("retrieving information from the database")
 
                     elif I == "create":
                         while  not FL_name:
                             print("Creating new account")
-                            FL_name = input("Enter your First and Last name: ")
+                            name = input("Enter your First and Last name: ")
                             pswd = input("Enter your password: ")
-                            if len(name.split()) > 2:
+                            if len(name.split()) > 2 or len(name.split()) < 2:
                                 print("invalid name")
                             else:
                                 FL_name = name
-                                self.data["first_name"] = name[0]
-                                self.data["last_name"] = name[1]
+                                self.data["first_name"] = name.split()[0]
+                                self.data["last_name"] = name.split()[1]
 
                         print("Please enter the following information:")
-                        create_account()
+                        self.create_account()
                         print("sending information to database")
 
                     else: 
@@ -123,3 +125,4 @@ if __name__ == "__main__":
     state = State()
     state.display_state()
     state.display_state()
+    state.print_data()
