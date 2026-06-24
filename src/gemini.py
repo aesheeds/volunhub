@@ -10,14 +10,14 @@ client = genai.Client(api_key=os.getenv("GEMINI_API_KEY"))
 # function to generate search query 
 def generate_search_query(first_name, degree, major, skills, experience, location, job_type):
     if job_type == "1":
-        job_lable = "internship"
+        job_label = "internship"
     elif job_type == "2":
-        job_lable = "entry-level job"
+        job_label = "entry-level job"
     else:
-        job_lable = "internship or entry-level job"
+        job_label = "internship or entry-level job"
     
     prompt = f"""
-            A {degree} student named {first_name} is looking for an {job_lable}.
+            A {degree} student named {first_name} is looking for an {job_label}.
             Their info includes:
             Major: {major}
             Skills: {skills} 
