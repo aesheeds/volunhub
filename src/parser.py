@@ -6,11 +6,14 @@ programname = 'Volunhub'
 class CLIstate(Enum):
     INTRO = auto()
     CREDENTIALS = auto()
-    SEARCH = auto()
-    SAVED = auto()
+    QUERY = auto()
     PROFILE = auto()
 
+""" Class State
+stores the current state of the program and parses the CLI
+"""
 class State():
+    #initialize the parser and the argumetns we are looking for
     def __init__(self, msg=None):
         if not msg:
             #todo make a better help_message
@@ -32,11 +35,25 @@ class State():
         
         self.args = None
         self.state = CLIstate.INTRO
+        self.data = {
+            "first_name": None,
+            "last_name": None,
+            "degree": None,
+            "major": None,
+            "skills": None,
+            "experience": None,
+            "location": None
+            }
+
+    def print_data(self):
+        print(self.data)
 
     def parse(self, string):
         self.args = self.parser.parse_known_args(string.split())
         if self.args.help:
             print(help_message)
+        if self.args.back and self.state == CLIstate.PROFILE:
+            self.state = CLIstate.QUERY
         if self.args.profile:
             self.state = CLIstate.PROFILE
 
@@ -45,11 +62,16 @@ class State():
         if self.args:
             self.args.exit
 
+    def create_account(self):
+        for key in self.data:
+            self.data[key] = input(f"{key}: ")
+
     def display_state(self):
         match self.state:
             case CLIstate.INTRO :
                 print("Welcome to JobHub!\nPlease enter your credentials or create a new account")
                 self.state = CLIstate.CREDENTIALS
+
             case CLIstate.CREDENTIALS :
                 FL_name = None
                 pswd = None
@@ -65,7 +87,9 @@ class State():
                                 print("invalid name")
                             else:
                                 FL_name = name
-                        print("sending information to database")
+                                self.data["first_name"] = name[0]
+                                self.data["last_name"] = name[1]
+                        print("retrieving information to database")
 
                     elif I == "create":
                         while  not FL_name:
@@ -76,17 +100,22 @@ class State():
                                 print("invalid name")
                             else:
                                 FL_name = name
+                                self.data["first_name"] = name[0]
+                                self.data["last_name"] = name[1]
+
+                        print("Please enter the following information:")
+                        create_account()
                         print("sending information to database")
 
                     else: 
                         print("invalid option")
 
-            case CLIstate.SEARCH :
-                print("Currently in Search State")
-            case CLIstate.SAVED :
-                print("Currently in SAVED State")
+            case CLIstate.QUERY :
+                print("Currently in Query State")
+            
             case CLIstate.PROFILE :
                 print("Currently in Profile State")
+            
             case _ :
                 print("Unknown State Reached")
 
