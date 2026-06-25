@@ -13,7 +13,7 @@ def display_jobs(jobs):
 
     for index, job in enumerate(jobs, start=1):
 
-        print(f"{index}. {job('title', 'No Title')}")
+        print(f"{index}. {job.get('title', 'No Title')}")
 
         print(
             f"  Company: "

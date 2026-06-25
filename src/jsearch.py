@@ -5,8 +5,6 @@ import os
 load_dotenv()
 api_key = os.getenv("JSEARCH_API_KEY")
 
-print(api_key)
-
 def send_query(string, location=None, employment_types=None, job_requirements=None):
     headers = { 'x-api-key': api_key }
     response = requests.request(
@@ -15,6 +13,13 @@ def send_query(string, location=None, employment_types=None, job_requirements=No
         params={"query":string},
         headers=headers
     )
+
+    data = response.json()
+
+    if response.status_code != 200:
+        print("Jsearch error:")
+        print(data)
+        return None
 
     return response.json()
 
