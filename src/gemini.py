@@ -33,7 +33,8 @@ def generate_search_query(first_name, degree,
             Generate a short job search (10 words max)
             query for a job search API. Include what you
             think is most important and will
-            generate the best job postings. Query should be realistic
+            generate the most/best job postings.
+            Query should be realistic
             to what type of postings are available.
             Return only the query. No punctuation, No quotes.
             """
