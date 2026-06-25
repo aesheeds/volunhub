@@ -7,27 +7,37 @@ load_dotenv()
 
 client = genai.Client(api_key=os.getenv("GEMINI_API_KEY"))
 
-# function to generate search query 
+# function to generate search query
 # no edge cases tests yet
-def generate_search_query(first_name, degree, major, skills, experience, location, job_type):
+
+
+def generate_search_query(first_name, degree,
+                          major, skills, experience,
+                          location, job_type):
+
     if job_type == "1":
         job_label = "internship"
     elif job_type == "2":
         job_label = "entry-level job"
     else:
         job_label = "internship or entry-level job"
-    
+
     prompt = f"""
-            A {degree} student named {first_name} is looking for an {job_label}.
+            A {degree} student named {first_name}
+            is looking for an {job_label}.
             Their info includes:
             Major: {major}
-            Skills: {skills} 
+            Skills: {skills}
             Experience: {experience}
-            Location to Work: {location}. 
-            Generate a short job search (10 words max) query for a job search API. Include what you think is most important and will
-            generate the best job postings. Return only the query. No punctuation, No quotes. 
+            Location to Work: {location}.
+            Generate a short job search (10 words max)
+            query for a job search API. Include what you
+            think is most important and will
+            generate the best job postings. Query should be realistic
+            to what type of postings are available.
+            Return only the query. No punctuation, No quotes.
             """
-    
+
     gemini_models = ["gemini-2.5-flash", "gemini-3.5-flash"]
 
     # try different models if one fails
@@ -47,7 +57,7 @@ def generate_search_query(first_name, degree, major, skills, experience, locatio
                 time.sleep(20)
 
     print("Fall back response...")
-    if skills:       
+    if skills:
         skill_list = skills.split(",")[0].strip()
     else:
         skill_list = ''

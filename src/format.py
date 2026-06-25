@@ -4,11 +4,9 @@ def display_jobs(jobs):
     """Displays job search results returned from
     JSearch in a clean command-line format.
     """
-    
     if not jobs:
         print("No jobs found.")
         return
-    
     print("\n===== Job Search Results =====\n")
 
     for index, job in enumerate(jobs, start=1):
@@ -30,7 +28,6 @@ def display_jobs(jobs):
                 f"  Type: "
                 f"{job.get('job_employment_type')}"
             )
-        
         if job.get("job_salary_string"):
             print(
                 f"  Salary: "
