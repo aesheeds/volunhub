@@ -84,6 +84,8 @@ class State():
                                                     )))
                         if self.data[key] < 1 or self.data[key] > 3:
                             print("invalid option")
+                elif key == "degree":
+                    self.data[key] = input("degree level (EX: bachelor, masters, etc):")
                 else:
                     self.data[key] = input(f"{key}: ")
 
@@ -147,7 +149,7 @@ class State():
                             print(f"Error: Unable to add user. Please Retry.")
                             login_option = None
                         else:
-                            print(f"Successfully added user: {self.data}")
+                            print(f"Successfully added user.")
 
                     else:
                         print("invalid option")
