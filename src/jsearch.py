@@ -14,6 +14,13 @@ def send_query(string, location=None, employment_types=None, job_requirements=No
         headers=headers
     )
 
+    data = response.json()
+
+    if response.statuscode != 200:
+        print("Jsearch error:")
+        print(data)
+        return None
+
     return response.json()
 
 if __name__ == "__main__":

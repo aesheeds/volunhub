@@ -104,14 +104,18 @@ def main():
     # need to add error checking here but I think it works for the most part
     raw_jobs = send_query(query)
     
+    if not raw_jobs:
+        print("Jsearch did not return return results.")
+        return
+    
+    if "data" not in raw_jobs:
+        print("Unexpoected JSearch response:")
+        print(raw_jobs)
+        return
+
     jobs = raw_jobs["data"]["jobs"]
-    print(raw_jobs["data"]["jobs"])
+
     display_jobs(jobs)
-
-
-    # Future integration:
-    #parser
-    #formatter
-
+    
 if __name__ == "__main__":
     main()
