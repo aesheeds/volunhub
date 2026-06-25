@@ -16,7 +16,7 @@ def send_query(string, location=None, employment_types=None, job_requirements=No
 
     data = response.json()
 
-    if response.statuscode != 200:
+    if response.status_code != 200:
         print("Jsearch error:")
         print(data)
         return None
