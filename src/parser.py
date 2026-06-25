@@ -76,7 +76,7 @@ class State():
             if key != "first_name" and key != "last_name":
                 if key == "job_type":
                     while self.data[key] < 1 or self.data[key] > 3:
-                        self.data[key] = int(input((f"{key}\n"
+                        self.data[key] = int(input((f"job type:\n"
                                                     "1. Internship\n"
                                                     "2. Entry-level job\n"
                                                     "3. Either\n"
@@ -109,14 +109,14 @@ class State():
                                 FL_name = name
                                 self.data["first_name"] = name.split()[0]
                                 self.data["last_name"] = name.split()[1]
-                        print("Retrieving information from the database")
+                        print("Retrieving information from the database . . .")
                         response = get_user(self.data["first_name"], self.data["last_name"])
                         if not response:
                             print("Error: Unable to find user. Please Retry.")
                             login_option = None
                         else:
                             self.data = response
-                            print(f"Successfully found user: {self.data}")
+                            print(f"Successfully found user.")
 
                     elif login_option == "c":
                         FL_name = None
@@ -132,7 +132,7 @@ class State():
 
                         print("Please enter the following information:")
                         self.create_account()
-                        print("Saving information to database")
+                        print("Saving information to database . . .")
                         response = save_user(
                             self.data["first_name"],
                             self.data["last_name"],

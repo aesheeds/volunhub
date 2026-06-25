@@ -95,6 +95,7 @@ def main():
     S.display_state()  # welcome state
     S.display_state()  # credential state
 
+    print("\nGenerating JSearch Query . . .")
     query = generate_search_query(
         S.data["first_name"],
         S.data["degree"],
@@ -104,13 +105,13 @@ def main():
         S.data["location"],
         str(S.data["job_type"])
     )
-    print("\nGenerated JSearch Query:")
-    print(query)
 
-    # need to add error checking here but I think it works for the most part
+    # print(query)  # add if we show user the query
+    print("Sending Query to JSearch . . .")
+
     raw_jobs = send_query(query)
     if not raw_jobs:
-        print("Jsearch did not return return results.")
+        print("Jsearch did not return results.")
         return
     if "data" not in raw_jobs:
         print("Unexpected JSearch response:")
