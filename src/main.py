@@ -109,8 +109,7 @@ def main():
         return
     
     if "data" not in raw_jobs:
-        print("Unexpoected JSearch response:")
-        print(raw_jobs)
+        print("Unexpected JSearch response:")
         return
 
     jobs = raw_jobs["data"]["jobs"]
