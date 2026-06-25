@@ -1,10 +1,12 @@
 # main.py
 from database import save_user, get_user
 from gemini import generate_search_query
+from jsearch import send_query
+from format import display_jobs
+from parser import State
+
 # Placeholders for future imports
-# from jsearch import search jobs
 # from parser import parse jsearch results
-# from format import display jobs
 
 """
 Creates a new user profile by collecting all the required information
@@ -79,25 +81,35 @@ The flow:
 5. Parser cleans the response
 6. Formatter displays the results"""
 def main():
-    print("Welcome to Jobhub!")
-    
-    profile = get_profile()
+    # print("Welcome to Jobhub!")
+    # profile = get_profile()
+
+    S = State()
+    S.display_state()   #welcome state
+    S.display_state()   #credential state
 
     query = generate_search_query(
-        profile["first_name"],
-        profile["degree"],
-        profile["major"],
-        profile["skills"],
-        profile["experience"],
-        profile["location"],
-        profile["job_type"]
+        S.data["first_name"],
+        S.data["degree"],
+        S.data["major"],
+        S.data["skills"],
+        S.data["experience"],
+        S.data["location"],
+        S.data["job_type"]
     )
     
     print("\nGenerated JSearch Query:")
     print(query)
 
+    # need to add error checking here but I think it works for the most part
+    raw_jobs = send_query(query)
+    
+    jobs = raw_jobs["data"]["jobs"]
+
+    display_jobs(jobs)
+
+
     # Future integration:
-    #jsearch query
     #parser
     #formatter
 
