@@ -95,7 +95,7 @@ def main():
         S.data["skills"],
         S.data["experience"],
         S.data["location"],
-        S.data["job_type"]
+        str(S.data["job_type"])
     )
     
     print("\nGenerated JSearch Query:")
@@ -105,7 +105,7 @@ def main():
     raw_jobs = send_query(query)
     
     jobs = raw_jobs["data"]["jobs"]
-
+    print(raw_jobs["data"]["jobs"])
     display_jobs(jobs)
 
 

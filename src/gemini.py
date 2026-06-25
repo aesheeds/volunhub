@@ -45,6 +45,9 @@ def generate_search_query(first_name, degree, major, skills, experience, locatio
                 print(f"{model} attempt {attempt + 1} failed, Retrying . . .")
                 time.sleep(20)
 
-    print("Fall back response...")       
-    skill_list = skills.split(",")[0].strip()
+    print("Fall back response...")
+    if skills:       
+        skill_list = skills.split(",")[0].strip()
+    else:
+        skill_list = ''
     return f"{job_label} {major} {skill_list} {location}"

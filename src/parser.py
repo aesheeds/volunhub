@@ -63,7 +63,7 @@ class State():
             if key != "first_name" and key != "last_name":
                 if key == "job_type":
                     while self.data[key] < 1 or self.data[key] > 3:
-                        self.data[key] = int(input(f"{key} Choose 1, 2, or 3: "))
+                        self.data[key] = int(input(f"{key}\n1. Internship\n2. Entry-level job\n3. Either\nChoose 1, 2, or 3: "))
                         if self.data[key] < 1 or self.data[key] > 3:
                             print("invalid option")
                 else:
@@ -77,10 +77,10 @@ class State():
 
             case CLIstate.CREDENTIALS :
                 I = None
-                while I != "login" and I != "create":
-                    I = input("Login or Create an account (login/create)? ")
+                while I != "l" and I != "c":
+                    I = input("Login or Create an account (l/c)? ")
                     
-                    if I == "login":
+                    if I == "l":
                         FL_name = None
                         while not FL_name:
                             print("Login to your account")
@@ -100,7 +100,7 @@ class State():
                         else:
                             print(f"Successfully found user: {self.data}")
 
-                    elif I == "create":
+                    elif I == "c":
                         FL_name = None
                         while  not FL_name:
                             print("Creating new account")
