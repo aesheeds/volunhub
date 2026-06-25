@@ -5,8 +5,6 @@ import os
 load_dotenv()
 api_key = os.getenv("JSEARCH_API_KEY")
 
-print(api_key)
-
 def send_query(string, location=None, employment_types=None, job_requirements=None):
     headers = { 'x-api-key': api_key }
     response = requests.request(
