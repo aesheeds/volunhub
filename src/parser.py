@@ -78,7 +78,7 @@ class State():
             case CLIstate.CREDENTIALS :
                 I = None
                 while I != "l" and I != "c":
-                    I = input("Login or Create an account (l/c)? ")
+                    I = input("Login or Create an account (l/c)? ").lower()
                     
                     if I == "l":
                         FL_name = None

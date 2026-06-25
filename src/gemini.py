@@ -8,6 +8,7 @@ load_dotenv()
 client = genai.Client(api_key=os.getenv("GEMINI_API_KEY"))
 
 # function to generate search query 
+# no edge cases tests yet
 def generate_search_query(first_name, degree, major, skills, experience, location, job_type):
     if job_type == "1":
         job_label = "internship"
@@ -50,4 +51,5 @@ def generate_search_query(first_name, degree, major, skills, experience, locatio
         skill_list = skills.split(",")[0].strip()
     else:
         skill_list = ''
+
     return f"{job_label} {major} {skill_list} {location}"
