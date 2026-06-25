@@ -5,12 +5,16 @@ import os
 load_dotenv()
 api_key = os.getenv("JSEARCH_API_KEY")
 
-def send_query(string, location=None, employment_types=None, job_requirements=None):
-    headers = { 'x-api-key': api_key }
+
+def send_query(string, location=None,
+               employment_types=None,
+               job_requirements=None):
+
+    headers = {'x-api-key': api_key}
     response = requests.request(
-        'GET', 
+        'GET',
         'https://api.openwebninja.com/jsearch/search-v2',
-        params={"query":string},
+        params={"query": string},
         headers=headers
     )
 
@@ -22,6 +26,7 @@ def send_query(string, location=None, employment_types=None, job_requirements=No
         return None
 
     return response.json()
+
 
 if __name__ == "__main__":
     send_query('graphics programming')
