@@ -1,4 +1,5 @@
 import argparse
+from database import get_user, save_user
 from enum import Enum, auto
 
 programname = 'Jobhub'
@@ -9,6 +10,11 @@ class CLIstate(Enum):
     QUERY = auto()
     PROFILE = auto()
 
+class JobType(Enum):
+    INTERNSHIP = auto() 
+    ENTRY = auto()
+    EITHER = auto()
+
 """ Class State
 stores the current state of the program and parses the CLI
 """
@@ -16,8 +22,7 @@ class State():
     #initialize the parser and the argumetns we are looking for
     def __init__(self, msg=None):
         if not msg:
-            #todo make a better help_message
-            help_message = 'This is a temporary help message to be redone later'
+            help_message = '-h --help           display this help message\n-q --query           query to get a list of potential jobs\n-e --exit           exit this program\n'
         else:
             help_message = msg
 
@@ -26,9 +31,7 @@ class State():
         #arguments to be parsed
         self.group = self.parser.add_mutually_exclusive_group()
         self.group.add_argument('-h', '--help', action='store_true', help='')
-        self.group.add_argument('-q', '--query', action='store_true', help='')
         self.group.add_argument('-e', '--exit', action='store_true', help='')
-        self.group.add_argument('-p', '--profile', action='store_true', help='')
         
         self.args = None
         self.state = CLIstate.INTRO
@@ -39,7 +42,8 @@ class State():
             "major": None,
             "skills": None,
             "experience": None,
-            "location": None
+            "location": None,
+            "job_type": 0
             }
 
     def print_data(self):
@@ -49,10 +53,6 @@ class State():
         self.args = self.parser.parse_known_args(string.split())
         if self.args.help:
             print(help_message)
-        if self.args.query:
-            self.state = CLIstate.QUERY
-        if self.args.profile:
-            self.state = CLIstate.PROFILE
 
     def exit(self):
         if self.args:
@@ -60,8 +60,14 @@ class State():
 
     def create_account(self):
         for key in self.data:
-            if self.data[key] is None:
-                self.data[key] = input(f"{key}: ")
+            if key != "first_name" and key != "last_name":
+                if key == "job_type":
+                    while self.data[key] < 1 or self.data[key] > 3:
+                        self.data[key] = int(input(f"{key} Choose 1, 2, or 3: "))
+                        if self.data[key] < 1 or self.data[key] > 3:
+                            print("invalid option")
+                else:
+                    self.data[key] = input(f"{key}: ")
 
     def display_state(self):
         match self.state:
@@ -70,16 +76,15 @@ class State():
                 self.state = CLIstate.CREDENTIALS
 
             case CLIstate.CREDENTIALS :
-                FL_name = None
-                pswd = None
                 I = None
                 while I != "login" and I != "create":
                     I = input("Login or Create an account (login/create)? ")
+                    
                     if I == "login":
+                        FL_name = None
                         while not FL_name:
                             print("Login to your account")
                             name = input("Enter your First and Last name: ")
-                            pswd = input("Enter your password: ")
                             if len(name.split()) > 2 or len(name.split()) < 2:
                                 print("invalid name")
                             else:
@@ -87,13 +92,19 @@ class State():
                                 print(FL_name)
                                 self.data["first_name"] = name.split()[0]
                                 self.data["last_name"] = name.split()[1]
-                        print("retrieving information from the database")
+                        print("Retrieving information from the database")
+                        response = get_user(self.data["first_name"], self.data["last_name"])
+                        if not response:
+                            print("Error: Unable to find user. Please Retry.")
+                            I = None
+                        else:
+                            print(f"Successfully found user: {self.data}")
 
                     elif I == "create":
+                        FL_name = None
                         while  not FL_name:
                             print("Creating new account")
                             name = input("Enter your First and Last name: ")
-                            pswd = input("Enter your password: ")
                             if len(name.split()) > 2 or len(name.split()) < 2:
                                 print("invalid name")
                             else:
@@ -103,17 +114,26 @@ class State():
 
                         print("Please enter the following information:")
                         self.create_account()
-                        print("sending information to database")
+                        print("Saving information to database")
+                        response = save_user(
+                            self.data["first_name"],
+                            self.data["last_name"],
+                            self.data["degree"],
+                            self.data["major"],
+                            self.data["skills"],
+                            self.data["experience"],
+                            self.data["location"],
+                            str(self.data["job_type"])
+                        )
+                        if not response :
+                            print(f"Error: Unable to add user. Please Retry.")
+                            I = None
+                        else:
+                            print(f"Successfully added user: {self.data}")
 
                     else: 
                         print("invalid option")
                 self.state = CLIstate.QUERY
-
-            case CLIstate.QUERY :
-                print("JobHub > ")
-            
-            case CLIstate.PROFILE :
-                self.print_data()
             
             case _ :
                 print("Unknown State Reached")

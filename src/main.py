@@ -3,6 +3,7 @@ from database import save_user, get_user
 from gemini import generate_search_query
 from jsearch import send_query
 from format import display_jobs
+import parser
 
 # Placeholders for future imports
 # from parser import parse jsearch results
@@ -81,8 +82,11 @@ The flow:
 6. Formatter displays the results"""
 def main():
     print("Welcome to Jobhub!")
-    
     profile = get_profile()
+
+    # S = State()
+    # S.display_state()   #welcome state
+    # S.display_state()   #credential state
 
     query = generate_search_query(
         profile["first_name"],
