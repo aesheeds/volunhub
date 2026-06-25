@@ -12,8 +12,9 @@ from parser import State
 Creates a new user profile by collecting all the required information
 and storing it in Supabase. Returns the completed profile.
 """
+
+
 def get_new_user():
-    
     first_name = input("First name: ")
     last_name = input("Last name: ")
     degree = input("Degree: ")
@@ -51,10 +52,13 @@ def get_new_user():
         "job_type": job_type
     }
 
+
 """Determine whether a user already exists.
 Retrieves an existing profile from Supabase or
 creates a new profile if there is none found
 """
+
+
 def get_profile():
 
     has_profile = input("Do you have an existing profile? (yes/no): ").lower()
@@ -68,25 +72,28 @@ def get_profile():
         if user:
             print("Profile found.")
             return user
-        
         print("Profile is not found. Creating a new profile")
     return get_new_user()
+
 
 """ Controls the entire workflow of Jobhub.
 The flow:
 1. Retrieves/creates a user profile
 2. Sends profile information to Gemini
-3. Gemini generate a JSearch query 
+3. Gemini generate a JSearch query
 4. JSearch return matching jobs
 5. Parser cleans the response
 6. Formatter displays the results"""
+
+
 def main():
     # print("Welcome to Jobhub!")
     # profile = get_profile()
 
     S = State()
-    S.display_state()   #welcome state
-    S.display_state()   #credential state
+
+    S.display_state()  # welcome state
+    S.display_state()  # credential state
 
     query = generate_search_query(
         S.data["first_name"],
@@ -97,17 +104,14 @@ def main():
         S.data["location"],
         str(S.data["job_type"])
     )
-    
     print("\nGenerated JSearch Query:")
     print(query)
 
     # need to add error checking here but I think it works for the most part
     raw_jobs = send_query(query)
-    
     if not raw_jobs:
         print("Jsearch did not return return results.")
         return
-    
     if "data" not in raw_jobs:
         print("Unexpected JSearch response:")
         print(raw_jobs)
@@ -116,6 +120,7 @@ def main():
     jobs = raw_jobs["data"]["jobs"]
 
     display_jobs(jobs)
-    
+
+
 if __name__ == "__main__":
     main()
