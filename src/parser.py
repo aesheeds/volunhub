@@ -98,6 +98,7 @@ class State():
                             print("Error: Unable to find user. Please Retry.")
                             I = None
                         else:
+                            self.data = response
                             print(f"Successfully found user: {self.data}")
 
                     elif I == "create":
