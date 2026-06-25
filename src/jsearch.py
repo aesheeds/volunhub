@@ -15,7 +15,8 @@ def send_query(string, location=None, employment_types=None, job_requirements=No
         params={"query":string},
         headers=headers
     )
-    print(response.text)
+
+    return response.json()
 
 if __name__ == "__main__":
     send_query('graphics programming')
