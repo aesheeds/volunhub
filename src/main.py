@@ -95,7 +95,7 @@ def main():
         S.data["skills"],
         S.data["experience"],
         S.data["location"],
-        S.data["job_type"]
+        str(S.data["job_type"])
     )
     
     print("\nGenerated JSearch Query:")
