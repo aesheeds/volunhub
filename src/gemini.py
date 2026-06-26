@@ -23,20 +23,44 @@ def generate_search_query(first_name, degree,
         job_label = "internship or entry-level job"
 
     prompt = f"""
-            A {degree} student named {first_name}
-            is looking for an {job_label}.
-            Their info includes:
-            Major: {major}
-            Skills: {skills}
-            Experience: {experience}
-            Location to Work: {location}.
-            Generate a short job search (10 words max)
-            query for a job search API. Include what you
-            think is most important and will
-            generate the most/best job postings.
-            Query should be realistic
-            to what type of postings are available.
-            Return only the query. No punctuation, No quotes.
+            You are a job search expert helping a student find jobs.
+            
+            Student Profile:
+            - Name: {first_name}
+            - Degree: {degree}
+            - Major: {major}
+            - Skills: {skills}
+            - Experience: {experience}
+            - Location: {location}
+            - Job Type: {job_label}
+            
+            Your Tasks:
+            - Based on a student's profile determine the 
+              BEST job title that matches their background
+            - Build a short search query (5-8 word) using that job title
+
+            Rules:
+            - Think about job titles that employers actually post for someone
+              with these skills
+            - Include location if specified (ex. not "Anywhere" or "Remote")
+            - Return only the query. No punctuation, No quotes.
+            - For internship, include "internship" in the query
+            - Don't include job type in the query if it's "internship or entry-level job"
+
+            Examples of good thinking:
+            - Skills: C, Python, embedded systems -> 
+              Job title: Embedded Software Engineer ->
+              Query: Embedded Software Engineer Internship
+
+            - Skills: React, JavaScript, CSS ->
+              Job title: Frontend Developer ->
+              Query: Frontend Developer Internship
+
+            - Skills: SQL, Excel, Python ->
+              Job title: Data Analyst ->
+              Query: Data Analyst Internship Chicago
+
+            Now generate the query
             """
 
     gemini_models = ["gemini-2.5-flash", "gemini-3.5-flash"]
@@ -51,6 +75,8 @@ def generate_search_query(first_name, degree,
                     model=model,
                     contents=prompt
                 )
+                #print out query for debugging
+                #print(response.text.strip())
                 return response.text.strip()
 
             except Exception as e:
