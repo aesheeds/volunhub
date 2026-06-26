@@ -24,7 +24,7 @@ def generate_search_query(first_name, degree,
 
     prompt = f"""
             You are a job search expert helping a student find jobs.
-            
+
             Student Profile:
             - Name: {first_name}
             - Degree: {degree}
@@ -33,9 +33,9 @@ def generate_search_query(first_name, degree,
             - Experience: {experience}
             - Location: {location}
             - Job Type: {job_label}
-            
+
             Your Tasks:
-            - Based on a student's profile determine the 
+            - Based on a student's profile determine the
               BEST job title that matches their background
             - Build a short search query (5-8 word) using that job title
 
@@ -45,10 +45,11 @@ def generate_search_query(first_name, degree,
             - Include location if specified (ex. not "Anywhere" or "Remote")
             - Return only the query. No punctuation, No quotes.
             - For internship, include "internship" in the query
-            - Don't include job type in the query if it's "internship or entry-level job"
+            - Don't include job type in the query if it's
+              "internship or entry-level job"
 
             Examples of good thinking:
-            - Skills: C, Python, embedded systems -> 
+            - Skills: C, Python, embedded systems ->
               Job title: Embedded Software Engineer ->
               Query: Embedded Software Engineer Internship
 
@@ -75,8 +76,8 @@ def generate_search_query(first_name, degree,
                     model=model,
                     contents=prompt
                 )
-                #print out query for debugging
-                #print(response.text.strip())
+                # print out query for debugging
+                # print(response.text.strip())
                 return response.text.strip()
 
             except Exception as e:
